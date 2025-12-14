@@ -12,7 +12,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 pico_sdk_init()
 
 add_executable(rfid_dfplayer
+    src/button.cpp
+    src/dfplayer.cpp
     src/main.cpp
+    src/rdm6300.cpp
 )
 
 target_include_directories(rfid_dfplayer PRIVATE include)
