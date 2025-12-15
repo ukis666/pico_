@@ -13,13 +13,19 @@ A minimal Raspberry Pi Pico 2 (RP2350) project built with the official Pico SDK 
 | RFID TX -> Pico | GPIO16 | Pin 21 | UART0 RX from RDM6300 TX (moved here to avoid conflict) |
 | RFID RX <- Pico | GPIO17 | Pin 22 | UART0 TX to RDM6300 RX (often unused) |
 | Button | GPIO14 | Pin 19 | Active-low to GND (Pin 18); uses internal pull-up |
-| 5V to DFPlayer | VBUS | Pin 40 | DFPlayer VCC |
-| 5V to RDM6300 (prototype) | VSYS | Pin 39 | RDM6300 VCC (see 5V note below) |
+| DFPlayer VCC | External 5V | — | Regulated 5V supply (not from Pico) |
+| RDM6300 VCC | External 5V | — | Regulated 5V supply (not from Pico) |
 | Ground | GND | Any | Common ground |
 
 > **Important wiring correction**: The RDM6300 was originally noted as using pins 6/7 (GPIO4/5), but those pins are reserved for the DFPlayer on UART1. The RFID reader must be moved to GPIO16/17 on UART0. Update the wiring accordingly before powering the board.
 
-**5V level note:** The RDM6300 TX line is 5V. Protect the Pico RX (GPIO16) with a resistor divider or level shifter.
+**Power Architecture (critical):**
+
+- DFPlayer Mini and RDM6300 modules **must be powered from an external, regulated 5V supply**. The Raspberry Pi Pico does **not** provide 5V rail current for these modules.
+- Do **not** connect the modules' 5V lines to Pico VBUS, VSYS, or any GPIO pin. Those pins cannot safely source the required current and are not a substitute for a regulated supply.
+- Power the Pico separately (USB or its own supply). Tie all grounds together to provide a common reference between the Pico UART signals and the modules.
+
+**5V logic-level note:** The RDM6300 TX line is 5V. Protect the Pico RX (GPIO16) with a resistor divider or level shifter.
 
 ## SD card layout for DFPlayer
 
